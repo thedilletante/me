@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package proxy;
+
+import "google/protobuf/empty.proto";
+
+service Proxy {
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {}
+  rpc ProcessOffer(ProcessOfferRequest) returns (ProcessOfferResponse) {}
+  rpc ProcessAnswer(ProcessAnswerRequest) returns (ProcessAnswerResponse) {}
+  rpc DestroySession(DestroySessionRequest) returns (google.protobuf.Empty) {}
+}
+
+message CreateSessionRequest {
+}
+
+message CreateSessionResponse {
+  string session_id = 1;
+}
+
+message ProcessOfferRequest {
+  string session_id = 1;
+  string sdp = 2;
+}
+
+message ProcessOfferResponse {
+  string sdp = 1;
+}
+
+message ProcessAnswerRequest {
+  string session_id = 1;
+  string sdp = 2;
+}
+
+message ProcessAnswerResponse {
+  string sdp = 1;
+}
+
+message DestroySessionRequest {
+  string session_id = 1;
+}
