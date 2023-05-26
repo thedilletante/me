@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+service LegService {
+  rpc CreateLeg(CreateLegRequest) returns (CreateLegResponse) {}
+  rpc SetRemoteDescription(SetRemoteDescriptionRequest) returns (SetRemoteDescriptionResponse) {}
+  rpc GenerateLocalDescription(GenerateLocalDescriptionRequest) returns (GenerateLocalDescriptionResponse) {}
+}
+
+message CreateLegRequest {
+
+}
+
+message CreateLegResponse {
+  string id = 1;
+}
+
+enum SessionDescriptionType {
+  OFFER = 0;
+  ANSWER = 1;
+}
+
+message SetRemoteDescriptionRequest {
+  string leg_id = 1;
+  string sdp = 2;
+  SessionDescriptionType type = 3;
+}
+
+message SetRemoteDescriptionResponse {
+
+}
+
+message GenerateLocalDescriptionRequest {
+  string id = 1;
+  SessionDescriptionType type = 2;
+}
+
+message GenerateLocalDescriptionResponse {
+  string sdp = 1;
+}

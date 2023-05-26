@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package proxy;
+
+import "google/protobuf/empty.proto";
+
+service Proxy {
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {}
+  rpc DestroySession(DestroySessionRequest) returns (DestroySessionResponse) {}
+
+  rpc CreateLeg(CreateLegRequest) returns (CreateLegResponse) {}
+  rpc DestroyLeg(DestroyLegRequest) returns (DestroyLegResponse) {}
+
+  rpc SetRemoteDescription(SetRemoteDescriptionRequest) returns (SetRemoteDescriptionResponse) {}
+  rpc SetLocalDescription(SetLocalDescriptionRequest) returns (SetLocalDescriptionResponse) {}
+  rpc GetLocalDescription(GetLocalDescriptionRequest) returns (GetLocalDescriptionResponse) {}
+}
+
+message CreateSessionRequest {}
+
+message CreateSessionResponse {
+  string session_id = 1;
+}
+
+message DestroySessionRequest {
+  string session_id = 1;
+}
+
+message DestroySessionResponse {}
+
+message CreateLegRequest {
+  string session_id = 1;
+}
+
+message CreateLegResponse {
+  string leg_id = 1;
+}
+
+message DestroyLegRequest {
+  string leg_id = 1;
+}
+
+message DestroyLegResponse {}
+
+message SetRemoteDescriptionRequest {
+  string leg_id = 1;
+  string sdp = 2;
+}
+
+message SetRemoteDescriptionResponse {
+}
+
+message SetLocalDescriptionRequest {
+  string leg_id = 1;
+  string sdp = 2;
+}
+
+message SetLocalDescriptionResponse {
+}
+
+message GetLocalDescriptionRequest {
+  string leg_id = 1;
+}
+
+message GetLocalDescriptionResponse {
+  string sdp = 1;
+}
