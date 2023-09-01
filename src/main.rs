@@ -126,7 +126,33 @@ mod control {
         }
 
         async fn create_leg(&self, request: Request<CreateLegRequest>) -> Result<Response<CreateLegResponse>, Status> {
-            todo!()
+            // Find session
+            let session_id = SessionId(request.get_ref().session_id.clone());
+            let mut sessions = self.sessions.lock().await;
+            let session = match sessions.get_mut(&session_id) {
+                Some(session) => session,
+                None => {
+                    debug!("Session not found: {:?}", session_id);
+                    return Err(Status::not_found("Session not found"))
+                }
+            };
+            match self.generate_unique_leg_id().await {
+                Ok(leg_id) => {
+                    let leg = Leg::new();
+                    let mut legs = self.legs.lock().await;
+                    debug!("Created leg, {:?}, {:?}", leg_id, leg);
+                    legs.insert(leg_id.clone(), leg);
+                    session.leg_ids.insert(leg_id.clone());
+                    let response = CreateLegResponse {
+                        leg_id: leg_id.0,
+                    };
+                    Ok(Response::new(response))
+                },
+                Err(err) => {
+                    debug!("Failed to create leg: {}", err);
+                    Err(Status::internal(err))
+                }
+            }
         }
 
         async fn destroy_leg(&self, request: Request<DestroyLegRequest>) -> Result<Response<DestroyLegResponse>, Status> {
@@ -164,6 +190,7 @@ mod control {
 }
 
 use log::info;
+
 
 #[tokio::main]
 async fn main() {
